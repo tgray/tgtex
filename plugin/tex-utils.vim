@@ -105,7 +105,7 @@ function! s:TexQuotes()
     return kinsert
 endfunction
 " mapping for quotation marks
-inoremap <buffer> " <C-R>=<SID>TexQuotes()<CR>
+" inoremap <buffer> " <C-R>=<SID>TexQuotes()<CR>
 " Function for smart-quotes: single
 function! s:TexSingQuotes()
     if getline('.')[0:col(".")] =~ '\(^\|[^\\]\)%'
@@ -120,5 +120,5 @@ function! s:TexSingQuotes()
     return schminsert
 endfunction
 " mapping for single quotation mark
-inoremap <buffer> ' <C-R>=<SID>TexSingQuotes()<CR>
+" inoremap <buffer> ' <C-R>=<SID>TexSingQuotes()<CR>
 
