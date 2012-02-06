@@ -11,7 +11,7 @@ nmap <buffer> <Leader>to :ViewTex<CR>
 nmap <buffer> <Leader>tl :ViewLog<CR>
 nmap <buffer> <Leader>tb :MakeBib<CR>
 
-map <Leader>ts :w<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf %<CR>
+map <Leader>ts :up<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf %<CR>
 
 if !exists('g:tex_flavor')
 	let g:tex_flavor = 'pdflatex'
@@ -45,7 +45,7 @@ function! s:compile_tex()
 		let &errorformat="%f:%l: %m"
 		let oldpath = getcwd()
 		if filereadable(b:root_tex)
-            :w
+            :up
 			exec 'lcd '.b:root_dir
 			silent exec 'make '.b:tex_filename
 			exec 'lcd '.oldpath
@@ -60,7 +60,7 @@ function! s:bibtex_tex()
     call s:get_tex_root()
     let oldpath = getcwd()
     if filereadable(b:root_tex)
-        :w
+        :up
         exec 'lcd '.b:root_dir
         silent exec '!bibtex '.fnamemodify(b:tex_filename, ":r")
         exec 'lcd '.oldpath
@@ -87,38 +87,4 @@ function! s:view_log()
 		echoerr b:root_log "is not a readable file."
 	endif
 endfunction
-
-" http://tex.stackexchange.com/questions/8537/vim-latex-double-quote-automatically-replaced
-" Function for smart-quotes: double
-function! s:TexQuotes()
-    if getline('.')[0:col(".")] =~ '\(^\|[^\\]\)%'
-       let kinsert = "\""
-    else
-        let kinsert = "\'\'"
-        let left = getline('.')[col('.')-2]
-        if left =~ '^\(\|\s\|{\|(\|\[\|&\)$'
-            let kinsert = "\`\`"
-        elseif left == "\\"
-            let kinsert = "\""
-        endif
-    endif
-    return kinsert
-endfunction
-" mapping for quotation marks
-" inoremap <buffer> " <C-R>=<SID>TexQuotes()<CR>
-" Function for smart-quotes: single
-function! s:TexSingQuotes()
-    if getline('.')[0:col(".")] =~ '\(^\|[^\\]\)%'
-       let schminsert = "'"
-    else
-        let schminsert = "'"
-        let left = getline('.')[col('.')-2]
-        if left =~ '^\(\|\s\|{\|(\|\[\|&\)$'
-            let schminsert = '`'
-        endif
-    endif
-    return schminsert
-endfunction
-" mapping for single quotation mark
-" inoremap <buffer> ' <C-R>=<SID>TexSingQuotes()<CR>
 
