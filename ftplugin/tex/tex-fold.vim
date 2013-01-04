@@ -6,15 +6,15 @@
 
 ""finish
 
-" [-- local settings --]
 setlocal foldexpr=TexFold(v:lnum)
+setlocal foldmethod=expr
 
-" [-- avoid multiple sourcing --]
-if exists("*TexFold")
-    setlocal foldmethod=expr
-    finish
-endif
-
+" " [-- avoid multiple sourcing --]
+" if exists("*TexFold")
+"     setlocal foldmethod=expr
+"     finish
+" endif
+" 
 
 fun! TexFoldContextWithDepth(line)
     if a:line =~ '\\part\>'			| return 1
@@ -51,8 +51,5 @@ fun! TexFold(lnum)
 	return '='
     endif
 endfun
-
-" [-- trigger indention --]
-setlocal foldmethod=expr
 
 " vim:ts=8
