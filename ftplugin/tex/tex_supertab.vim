@@ -8,7 +8,7 @@ if exists('g:SuperTabCompletionContexts')
         let synname = synIDattr(synID(line('.'), cnum-1, 1), 'name')
         if curline =~ '[{\\]\w*\%' . cnum .'c' && synname !~ '\(String\|Comment\)'
             return "\<c-x>\<c-o>"
-        elseif curline =~ '\\\includegraphics\S*{$' || line_start =~ '\\\input\S*{$' 
+        elseif curline =~ '\\\includegraphics\S*{$' || curline =~ '\\\input\S*{$' 
             return "\<c-x>\<c-f>"
         endif
     endfunction
