@@ -1,4 +1,5 @@
 command! MakeTex call <SID>compile_tex()
+command! MakeLuaTex call <SID>compile_luatex()
 command! ViewTex call <SID>view_output()
 command! ViewLog call <SID>view_log()
 command! MakeBib call <SID>bibtex_tex()
@@ -9,6 +10,7 @@ autocmd QuickFixCmdPost * :cw
 nmap <buffer> <Leader>tt :MakeTex<CR>
 nmap <buffer> <Leader>to :ViewTex<CR>
 nmap <buffer> <Leader>tl :ViewLog<CR>
+nmap <buffer> <Leader>tu :MakeLuaTex<CR>
 nmap <buffer> <Leader>tb :MakeBib<CR>
 
 map <Leader>ts :up<CR>:silent !/Applications/Skim.app/Contents/SharedSupport/displayline <C-r>=line('.')<CR> %<.pdf %<CR>
@@ -41,7 +43,7 @@ function! s:compile_tex()
 	call s:get_tex_root()
 	if exists('g:tex_flavor')
 		compiler tex
-		let &makeprg=g:tex_flavor." -file-line-error -interaction=nonstopmode -synctex=1"
+		let &makeprg=g:tex_flavor." -file-line-error -interaction=nonstopmode -synctex=1 --output-format=pdf"
 		let &errorformat="%f:%l: %m"
 		let oldpath = getcwd()
 		if filereadable(b:root_tex)
@@ -55,6 +57,14 @@ function! s:compile_tex()
 		endif
 	endif
 endfunction
+
+function! s:compile_luatex()
+	let old_tex_flavor = g:tex_flavor
+	let g:tex_flavor = 'lualatex'
+	call s:compile_tex()
+	let g:tex_flavor = old_tex_flavor 
+endfunction
+
 
 function! s:bibtex_tex()
     call s:get_tex_root()
